@@ -6,8 +6,8 @@ This is my submission for the [Machine Learning Zoomcamp's Midterm Project](http
 ## Problem statement
 
 I've chosen the [Bike Sharing Dataset](https://archive.ics.uci.edu/ml/datasets/bike+sharing+dataset#), which contains 2 years of data of the Capital Bikeshare system in
-Washington DC. The exact dataset I worked with is preprocessed and enriched by Hadi Fanaee at the University of Porto - I retrieved it from the public
-[machine learning data repository of University of California Irvine](https://archive.ics.uci.edu/ml/datasets/bike+sharing+dataset#).
+Washington DC. The exact dataset I worked with is preprocessed and enriched by Hadi Fanaee from the University of Porto - I retrieved it from the public
+[machine learning data repository of UC Irvine](https://archive.ics.uci.edu/ml/datasets/bike+sharing+dataset#).
 
 The dataset contains hourly rental data with the following attributes (based on the README provided with the file):
 
@@ -35,9 +35,9 @@ The dataset contains hourly rental data with the following attributes (based on 
 	- registered: count of registered users
 	- cnt: count of total rental bikes including both casual and registered
 
-I used all the attributes, except the followings: `instant`, `yr`, `casual`, `registered`.
+I used all the attributes to build the model, except the followings: `instant`, `yr`, `casual`, `registered`.
 I considered the task as a regression problem, where the target is the number of bikes rented in a given hour (variable `cnt` in the dataset). 
-My goal during the optimization of the model 
+My goal during the optimization of the model was to minimize root mean squared error (RMSE).
 Sources:
 - the description of the data can be found here: [https://archive.ics.uci.edu/ml/datasets/bike+sharing+dataset#]()
 - the dataset can be downloaded from here: [https://archive.ics.uci.edu/ml/machine-learning-databases/00275/Bike-Sharing-Dataset.zip]()
@@ -48,15 +48,15 @@ Sources:
 
 # Main products
 
-- `notebook.ipynb` - Jupyter notebook containing the data acquisition, the data exploration, data splitting and the experiments with different models
+- `notebook.ipynb` - Jupyter notebook containing the data acquisition, the data exploration, data splitting steps and the experiments with different models
 - `train.py` 
-    - a script-ed version of the data acquisition model training, including downloading the data, tuning the model and saving the best one
+    - a script-ed version of the data acquisition and model training, including downloading the data, tuning the model and saving the best one
     - it doesn't just train the best model (RandomTreeRegressor) but goes through on all the options from LinearRegression, through Ridge, Lasso and DecisionTreeRegressor
-    - at the end, it selects the (or one of) the model with the lowest RMSE
+    - at the end, it selects the (or one of the) best model with the lowest RMSE
     - running the script
         1. create and activate pipenv (see section "Installing dependencies and using virtual environment")
         2. `python train.py` runs all the steps. 
-           Optionally, you can give name as input param (e.g. `python train.py mypreciousmodel`) you want to save your model. 
+           Optionally, you can give the model filename as input param (e.g. `python train.py mypreciousmodel`) you want to save your model. 
            It will be placed in the folder `midterm-project/models`. 
 
 - `predict_bikerental.py`
@@ -64,7 +64,7 @@ Sources:
         - the app has the following endpoints:
             - `/` (method `GET`) - a simple healthcheck endpoint
             - `/predict` (method `POST`) - predicting the number of bike rentals
-    - basic (not extensive) validation on the input data
+    - does basic (not extensive) validation on the input data
     - transforms the data to make it consumable for the model
 
 - `Dockerfile` - in order to build a Docker image of the app, including being able to deploy on AWS Elastic Beanstalk
@@ -91,7 +91,7 @@ The app will be available under `http://localhost:9911/` and `http://localhost:9
 
 ## Building and running the app in a Docker image
 
-1. Build the image using `c`
+1. Build the image using `docker build -t mlzoomcamp-bike-rental:1.0 -f Dockerfile .`
    or you can get it from Dockerhub: `docker pull akosbence/mlzoomcamp-bike-rental:1.0`
 2. `docker run -ti -p 9911:9911 mlzoomcamp-bike-rental:1.0` (in case of Dockerhub image use `akosbence/mlzoomcamp-bike-rental:1.0`)
     - if you want to map the service on your machine to a port other than 9911,  use `-p <YOUR_PORT_NUMBER>:9911` instead
@@ -104,9 +104,9 @@ https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-install-advanced.
 
 1. Initializing EB config `eb init -p docker -r eu-west-1 mlzmcmp-bike-rental`
 2. (Optional) Check app locally: `eb local run --port 9911` - this spins up the service locally using EB and Docker 
-3. Deploying app to AWS: `eb create mlzmcmp-bike-rental-env` - builds and deploys the app, including provisioning all the necessary services. The app can be changed by `eb deploy mlzmcmp-bike-rental-env` 
-4. The app is available under `mlzmcmp-bike-rental-env.eba-wixby7us.eu-west-1.elasticbeanstalk.com`. Please note that the root path gives just a health check status,
-while the bike rental prediction service is available under the `/predict` endpoint using POST method.
+3. Deploying app to AWS: `eb create mlzmcmp-bike-rental-env` - builds and deploys the app, including provisioning all the necessary services. The app can be changed by `eb deploy mlzmcmp-bike-rental-env`.
+4. The app is available under `mlzmcmp-bike-rental-env.eba-wixby7us.eu-west-1.elasticbeanstalk.com` (again, the root path gives just a health check status,
+while the bike rental prediction service is available under the `/predict` endpoint using POST method).
 **Please note that the app will be available on AWS until 15 November 2021 23:59 CET**
 
 # Testing and using the app

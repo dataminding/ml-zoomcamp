@@ -19,7 +19,7 @@ URL = "https://archive.ics.uci.edu/ml/machine-learning-databases/00275/Bike-Shar
 FILENAME = URL.split("/")[-1]
 DATA_FOLDER = "data"
 MODEL_FOLDER = "models"
-CSV_FILEPATH = os.path.join(DATA_FOLDER, "data.csv")
+CSV_FILEPATH = os.path.join(DATA_FOLDER, "hour.csv")
 
 
 def download_data(url=URL, folder=DATA_FOLDER):
@@ -340,6 +340,8 @@ if __name__ == "__main__":
         model_filename = (
             f"{datetime.utcnow().strftime('%Y%m%dT%H%M')}_{uuid.uuid1().hex[:8]}"
         )
+
+    download_data()
 
     best_model = train_model(CSV_FILEPATH)
 

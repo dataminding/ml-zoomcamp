@@ -7,8 +7,8 @@ This is my submission for the [Machine Learning Zoomcamp's Capstone Project](htt
 
 As the topic of the Capstone Project, I've chosen the detection of real/fake job postings. The dataset is available on [Kaggle](https://www.kaggle.com/shivamb/real-or-fake-fake-jobposting-prediction).
 It contains about ~18k records with job postings marked as real or fraudlent. I considered this as a binary classification problem, where the goal was to identify
-whether a job posting is real or fake (fraudlent).
-The dataset contains following attributes:
+whether a job posting is fake or real.
+The dataset contains following the attributes:
 
     - job_id: a record ID, which isn't considered by the model
 	- title: name/title of the job posting (e.g. Bill Review Manager)
@@ -33,7 +33,7 @@ The dataset contains following attributes:
 	- function: function of the position within the organization (e.g. Research)
     - fraudlent: binary flag showing if the job posting is real or fake. this is the target variable
 
-Since the dataset contains textual data (e.g. `description`), I've preprocessed those columns with `TfIdfVectorizer`. 
+Since the dataset contains textual data (e.g. `description`), I've transformed those columns with `TfIdfVectorizer`. 
 The optimization criteria was to achieve the best ROC AUC value.
 
 # Main products
@@ -64,12 +64,13 @@ The optimization criteria was to achieve the best ROC AUC value.
 # Getting the dataset
 - the description of dataset is available here: https://www.kaggle.com/shivamb/real-or-fake-fake-jobposting-prediction
 - the dataset can be downloaded from here: https://www.kaggle.com/shivamb/real-or-fake-fake-jobposting-prediction/download
-- if you don't have a Kaggle account or just want to get it faster, you can use this link instead [https://bit.ly/3pLvxaV]. 
+- if you don't have a Kaggle account or just want to get it faster, you can use this link instead https://bit.ly/3pLvxaV. 
 
 
 # Running and deploying the app
 
 i) Clone/download this repo
+
 ii) For all the below steps, make sure current directory is `capstone-project`
 
 ## Installing dependencies and using virtual environment
@@ -88,8 +89,10 @@ The app will be available under `http://localhost:9911/` (health check) and `htt
 ## Building and running the app in a Docker image
 
 1. Build the image using `docker build -t mlzoomcamp-fake-job-detector:1.0 -f Dockerfile .`
-   or you can get it from Dockerhub: `docker pull akosbence/mlzoomcamp-fake-job-detector:13.12.2021`
-2. `docker run -ti -p 9911:9911 mlzoomcamp-fake-job-detector:1.0` (in case of Dockerhub image use `akosbence/mlzoomcamp-fake-job-detector:13.12.2021`)
+   
+    alternatively, you can pull the image from Dockerhub: `docker pull akosbence/mlzoomcamp-fake-job-detector:13.12.2021`
+2. `docker run -ti -p 9911:9911 mlzoomcamp-fake-job-detector:1.0` 
+   (use `akosbence/mlzoomcamp-fake-job-detector:13.12.2021` if you obtained the image from Dockerhub)
     - if you want to map the service on your machine to a port other than 9911,  use `-p <YOUR_PORT_NUMBER>:9911` instead
 3. Similarly to the non-dockerized solution, the app is available under `http://localhost:9911/` and `http://localhost:9911/detect` (POST method).
    
@@ -100,9 +103,10 @@ https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-install-advanced.
 
 1. Initializing EB config `eb init -p docker -r mlzoomcamp-fake-job-detector`
 2. (Optional) Check app locally: `eb local run --port 9911` - this spins up the service locally using EB and Docker 
-3. Deploying app to AWS: `eb create mlzoomcamp-fake-job-detector-env` - builds and deploys the app, including provisioning all the necessary services. The app can be changed by `eb deploy mlzmcmp-bike-rental-env`.
+3. Deploying app to AWS: `eb create mlzoomcamp-fake-job-detector-env` - builds and deploys the app, including provisioning all the necessary services. 
+   The app can be changed by `eb deploy mlzoomcamp-fake-job-detector-env`.
 4. The app is available under `http://mlzoomcamp-fake-job-detector-dev.eu-west-1.elasticbeanstalk.com` (again, the root path gives just a health check status,
-while the bike rental prediction service is available under the `/detect` endpoint using POST method).
+while the fake job detection service is available under the `/detect` endpoint using POST method).
 **Please note that the app will be available on AWS until 21 December 2021 23:59 CET**
 
 # Testing and using the app
@@ -121,7 +125,6 @@ the most important steps of the process to stdout.
     ` telecommuting` , ` has_company_logo` , ` has_questions` , ` employment_type` , ` required_experience` , 
     ` required_education` , ` industry` , ` function` , ` country` , ` state` , ` city` 
     - if one of parameters is missing, the app will substitute it with default values
-  - for the descriptions and value ranges please see the problem statement (above)
 - sample request body
     `{"title": "Software Engineer - ASP.NET", "department": null, "salary_range": null, 
   "company_profile": "Enozom is a leading software development company, offering custom software development, software products, offshore software development, professional outsourcing and software consultancy", 

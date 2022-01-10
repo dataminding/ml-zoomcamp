@@ -1,0 +1,24 @@
+abarabas@XIN859423 [14:00:01] [~/devel/jupyter/mlbookcamp-code/course-zoomcamp/05-deployment/code] [master *] -> % kubectl get svc 
+NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   4m14s
+
+abarabas@XIN859423 [14:00:22] [~/devel/jupyter/mlbookcamp-code/course-zoomcamp/05-deployment/code] [master *]
+-> % kind load docker-image churn-model:v001
+Image: "churn-model:v001" with ID "sha256:9fef2b13d9c29f348f6b3b411b2cfd9df0840523d44a36b1ea708aca1421ce49" not yet present on node "kind-control-plane", loading...
+
+abarabas@XIN859423 [14:10:31] [~/devel/jupyter/zoomcamp] 
+-> % kubectl apply -f deployment.yaml 
+deployment.apps/churn created
+abarabas@XIN859423 [14:10:51] [~/devel/jupyter/zoomcamp] 
+-> % kubectl get pods
+NAME                     READY   STATUS    RESTARTS   AGE
+churn-8449c67c88-8ldpq   1/1     Running   0          14s
+
+abarabas@XIN859423 [14:10:55] [~/devel/jupyter/zoomcamp]
+-> % kubectl apply -f service.yaml   
+service/churn-svc created
+abarabas@XIN859423 [14:14:03] [~/devel/jupyter/zoomcamp] 
+-> % kubectl get svc
+NAME         TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+churn-svc    LoadBalancer   10.96.189.208   <pending>     80:30903/TCP   6s
+kubernetes   ClusterIP      10.96.0.1       <none>        443/TCP        18m
